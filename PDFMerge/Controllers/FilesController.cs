@@ -28,10 +28,14 @@ namespace PDFMerge.Controllers
                 pdf.LoadFromFile(file);
                 pdf.SaveToFile("Result.html", FileFormat.HTML);
                 string html = System.IO.File.ReadAllText("Result.html");
+                var fileInfo = new System.IO.FileInfo(file);
                 filesModel.Add(new FileModel()
                 {
                     FileData = html,
-                    FileName = Path.GetFileName(file)
+                    FileName = Path.GetFileName(file),
+                    LastModifiedDate = fileInfo.LastWriteTimeUtc.ToString("dd-MM-yyyy"),
+                    Id = 1,
+                    Size = $"{fileInfo.Length} bytes" 
                 });
             }
             return Ok(filesModel);
