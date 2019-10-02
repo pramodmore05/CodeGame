@@ -12,7 +12,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NgxSummernoteModule } from "ngx-summernote";
 import { MergeDocumentsComponent } from './merge-documents/merge-documents.component';
 
-
+import { AgGridModule } from 'ag-grid-angular';
+import { ApplicationStateService } from './services/application-state.service';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MergeDocumentsComponent } from './merge-documents/merge-documents.compo
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    AgGridModule.withComponents([]),
     NgxSummernoteModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
