@@ -15,6 +15,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { AgGridModule } from 'ag-grid-angular';
 import { ApplicationStateService } from './services/application-state.service';
+import { TextControlComponent } from './text-control/text-control.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ApplicationStateService } from './services/application-state.service';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    MergeDocumentsComponent
+    MergeDocumentsComponent,
+    TextControlComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,6 +39,7 @@ import { ApplicationStateService } from './services/application-state.service';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'merge-docs', component: MergeDocumentsComponent },
+      { path: 'text-control', component: TextControlComponent },
     ])
   ],
   providers: [],

@@ -12,5 +12,6 @@ namespace PDFMerge.Models
         public string FileName { get; set; }
         public string FileData { get; set; }
         public string LastModifiedDate { get; set; }
+        public byte[] Data { get; set; }
     }
 }

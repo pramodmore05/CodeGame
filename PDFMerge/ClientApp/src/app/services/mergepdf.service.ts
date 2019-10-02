@@ -15,5 +15,12 @@ export class MergepdfService {
   getFiles():Observable<FileModel[]> {
     return this.httpClient.get('https://localhost:44372/api/files/getfiles') as Observable<FileModel[]>
   }
+
+  getFile(): Observable<FileModel> {
+    return this.httpClient.get('https://localhost:44372/api/files/getfile') as Observable<FileModel>
+  }
   
+  saveDocument(fileData:FormData){
+    return this.httpClient.post('https://localhost:44372/api/files/saveFile',fileData);
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, Inject, EventEmitter, Output, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ApplicationStateService } from '../services/application-state.service';
 
 @Component({
   selector: 'app-merge-docs',
@@ -25,7 +26,11 @@ export class MergeDocumentsComponent {
   }
 
   public configuration: any;
-  constructor() {
+  constructor(private service: ApplicationStateService) {
+    this.sourceName = service.data[1][0].fileName;
+    this.destinationName = service.data[1][1].fileName;
+    this._sourceHtmlContent = service.data[1][0].fileData;
+    this._destinationHtmlContent = service.data[1][1].fileData;
     this.configuration = {
       placeholder: '',
       tabsize: 2,
