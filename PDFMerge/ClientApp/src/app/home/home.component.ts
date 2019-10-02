@@ -4,6 +4,7 @@ import { MergepdfService } from '../services/mergepdf.service';
 import { FileModel } from '../model/file.model';
 import { ApplicationStateService } from '../services/application-state.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,8 @@ export class HomeComponent {
 
   constructor(private mergePDFService: MergepdfService,
     private applicationStateService: ApplicationStateService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private router: Router) {
 
     this.applicationStateService.data = [];
   }
@@ -73,6 +75,7 @@ export class HomeComponent {
         action: function () {
           //window.alert("Alerting about " + params.value);
           console.log(this.selectedRowData);
+          this.router.navigate(['/merge-docs']);
           //this.applicationStateService.data=this.selectedRowData;
         }.bind(this),
         cssClasses: ["redFont", "bold"]
