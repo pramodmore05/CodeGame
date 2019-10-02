@@ -24,3 +24,31 @@
     (gridReady)="onGridReady($event)"
      >
 </ag-grid-angular>
+
+<div class="container">
+  <div class="card" #modal1>
+    <div class="card-header">Basic modal
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <ng-template #content let-ca="close('a')" let-cb="close('b')" let-d="dismiss()">
+            <div class="modal-header">
+              <h4 class="modal-title">Modal title</h4>
+              <span class="commonglyphs commonglyphs-close pull-right modal-close" aria-label="Close"
+                (click)="ca"></span>
+            </div>
+            <div class="modal-body">
+              <p>Please select second file to merge</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" (click)="local">Select from local</button>
+              <button class="btn btn-primary" type="button" (click)="cloud">Select from cloud</button>
+            </div>
+          </ng-template>
+          <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Modal</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

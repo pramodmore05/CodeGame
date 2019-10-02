@@ -28,13 +28,33 @@ namespace PDFMerge.Controllers
                 pdf.LoadFromFile(file);
                 pdf.SaveToFile("Result.html", FileFormat.HTML);
                 string html = System.IO.File.ReadAllText("Result.html");
+                var fileInfo = new System.IO.FileInfo(file);
                 filesModel.Add(new FileModel()
                 {
                     FileData = html,
-                    FileName = Path.GetFileName(file)
+                    FileName = Path.GetFileName(file),
+                    LastModifiedDate = fileInfo.LastWriteTimeUtc.ToString("dd-MM-yyyy"),
+                    Id = 1,
+                    Size = $"{fileInfo.Length} bytes" 
                 });
             }
             return Ok(filesModel);
-        } 
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult<bool> SaveFile(IFormFile file)
+        {
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", file.FileName);
+            PdfDocument pdf = new PdfDocument();
+            using (var ms = new MemoryStream())
+            {
+                file.CopyTo(ms);
+                var fileBytes = ms.ToArray();
+                pdf.LoadFromBytes(fileBytes);
+                pdf.SaveToFile(filePath, FileFormat.PDF);
+            }
+            return true;
+        }
     }
 }
