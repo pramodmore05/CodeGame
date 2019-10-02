@@ -35,6 +35,22 @@ namespace PDFMerge.Controllers
                 });
             }
             return Ok(filesModel);
-        } 
+        }
+        
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult<bool> SaveFile(IFormFile file)
+        {
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", file.FileName);
+            PdfDocument pdf = new PdfDocument();
+            using (var ms = new MemoryStream())
+            {
+                file.CopyTo(ms);
+                var fileBytes = ms.ToArray();
+                pdf.LoadFromBytes(fileBytes);
+                pdf.SaveToFile(filePath, FileFormat.PDF);
+            }
+            return true;
+        }
     }
 }
