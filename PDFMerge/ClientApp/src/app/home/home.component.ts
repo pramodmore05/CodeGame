@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
+  styleUrls: ['./home.component.scss'],
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
@@ -29,9 +30,9 @@ export class HomeComponent {
   }
 
   columnDefs = [
-    { headerName: 'FileName', field: 'fileName' },
-    { headerName: 'Size', field: 'size' },
-    { headerName: 'Last Modified', field: 'lastModifiedDate' }
+    { headerName: 'FileName', field: 'fileName', minWidth: 100 },
+    { headerName: 'Size', field: 'size', minWidth: 50 },
+    { headerName: 'Last Modified', field: 'lastModifiedDate', minWidth: 50 }
   ];
 
   rowData: FileModel[];
@@ -41,8 +42,9 @@ export class HomeComponent {
     // this.gridColumnApi = params.columnApi;
     this.mergePDFService.getFiles().subscribe((response) => {
       this.rowData = response;
+      this.gridApi.sizeColumnsToFit();
     });
-
+    
   }
 
 
@@ -82,6 +84,8 @@ export class HomeComponent {
     //});
   }
 
+
+
   onDocumentFilesSelectionChanged() {
     var selectedRows = this.documentFilesGridAPI.getSelectedRows();
     selectedRows.forEach((item: FileModel) => {
@@ -111,7 +115,7 @@ export class HomeComponent {
   }
 
   openDocumentFileModel(content) {
-    this.modalService.open(content, { centered: true }).result.then((result) => {
+    this.modalService.open(content, { centered: true, windowClass:'modal-custom'}).result.then((result) => {
       console.log(result);
       if (result == "merge") {
       }

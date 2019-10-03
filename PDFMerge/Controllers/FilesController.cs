@@ -98,20 +98,9 @@ namespace PDFMerge.Controllers
         [Route("[action]")]
         public ActionResult<bool> Save(FileModel model)
         {
+            var bytes = Convert.FromBase64String(model.FileData);
+            System.IO.File.WriteAllBytes(Path.Combine(Environment.CurrentDirectory + "\\files\\", model.FileName), bytes);
             return false;
-            //PdfDocument pdf = new PdfDocument();
-            //string input = @"<strong>This is a test for converting HTML string to PDF </strong>
-            //     <ul><li>Spire.PDF supports to convert HTML in URL into PDF</li>
-            //     <li>Spire.PDF supports to convert HTML string into PDF</li>
-            //     <li>With the new plugin</li></ul>";
-
-            //Spire.Pdf.HtmlConverter.Qt.HtmlConverter.Convert(input, "1.pdf", true, 10 * 1000, new SizeF(612, 792), new PdfMargins(0), LoadHtmlType.SourceCode);
-            //pdf.LoadFromFile("Result.html", FileFormat.HTML);
-            //var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", model.FileName + ".pdf");
-            //byte[] bytes = Encoding.ASCII.GetBytes(model.FileData);
-            ////pdf.LoadFromBytes(bytes);
-            //pdf.SaveToFile(filePath, FileFormat.PDF);
-            //return true;
         }
 
     }
