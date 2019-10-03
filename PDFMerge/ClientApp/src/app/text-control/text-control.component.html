@@ -10,14 +10,14 @@
 </div>
 <div class="col-12">
   <div class="col-6 float-left">Merge from {{sourceFileModel.fileName}}</div>
-  <div class="col-6 float-left">
+  <div class="col-6 float-left mb-2">
       <div class="col-2 float-left" style="white-space: nowrap;display: inline-flex;">Merge to</div>
     <div class="col-5 float-left" style="white-space: nowrap;display: inline-flex;">
        
       <input type="text" class="form-control mr-2" placeholder="File Name" [(ngModel)]="destinationFileModel.fileName">
     </div>
     <div class="col-5 float-left">
-      <span class="input-group-btn">
+      <span class="input-group-btn mr-1">
         <button class="btn btn-primary" type="button" (click)="merge()">Merge</button>
       </span>
       <span class="input-group-btn">

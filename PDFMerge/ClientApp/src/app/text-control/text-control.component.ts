@@ -14,16 +14,24 @@ export class TextControlComponent implements OnInit {
 
   constructor(private mergePDFService: MergepdfService,private applicationStateService:ApplicationStateService) {
     if(this.applicationStateService.data){
-    this.sourceFileModel=this.applicationStateService.data[0];
-    this.destinationFileModel=this.applicationStateService.data[1];
-    
+      this.sourceFileModel=this.applicationStateService.data[0];
+      this.destinationFileModel=this.applicationStateService.data[1];
     }
   }
   sourceFileModel:FileModel;
   destinationFileModel:FileModel;
   
   control1: any;
-  control2: any; 
+  control2: any;
+  swapped =  false;
+
+  swap() {
+    this.swapped = !this.swapped;
+    this.destinationFileModel = this.swapped ? this.applicationStateService.data[0] : this.applicationStateService.data[1];
+    this.sourceFileModel = this.swapped  ? this.applicationStateService.data[1] : this.applicationStateService.data[0];
+    this.control1.loadDocument(TXTextControl.StreamType.AdobePDF, this.sourceFileModel.fileData);
+    this.control2.loadDocument(TXTextControl.StreamType.AdobePDF, this.destinationFileModel.fileData);
+  }
 
   getDocument() {
 
