@@ -31,4 +31,8 @@ export class MergepdfService {
   autoMergedDocument(fileData:FileModel[]){
     return this.httpClient.post('https://localhost:44372/api/files/automerge',fileData);
   }
+
+  getDocumentToView(fileData:FileModel){
+    return this.httpClient.get('https://localhost:44372/api/files/downloadFile?fileName='+fileData.fileName, { responseType: 'blob' });
+  }
 }

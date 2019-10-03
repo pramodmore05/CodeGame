@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApplicationStateService } from '../services/application-state.service';
 import { MergepdfService } from '../services/mergepdf.service';
 import { FileModel } from '../model/file.model';
+import { Router } from '@angular/router';
 
 declare var TXTextControlWeb, TXTextControl;
 
@@ -12,18 +13,31 @@ declare var TXTextControlWeb, TXTextControl;
 })
 export class TextControlComponent implements OnInit {
 
-  constructor(private mergePDFService: MergepdfService,private applicationStateService:ApplicationStateService) {
-    if(this.applicationStateService.data){
-    this.sourceFileModel=this.applicationStateService.data[0];
-    this.destinationFileModel=this.applicationStateService.data[1];
-    
+  constructor(private mergePDFService: MergepdfService, private applicationStateService: ApplicationStateService,
+    private router:Router) {
+    if (!this.applicationStateService.data) {
+      this.sourceFileModel = JSON.parse(localStorage.getItem('data'))[0];;
+      this.destinationFileModel = JSON.parse(localStorage.getItem('data'))[1];
+    }
+    else {
+      this.sourceFileModel=this.applicationStateService.data[0];
+      this.destinationFileModel = this.applicationStateService.data[1];
     }
   }
   sourceFileModel:FileModel;
   destinationFileModel:FileModel;
   
   control1: any;
-  control2: any; 
+  control2: any;
+  swapped =  false;
+
+  swap() {
+    this.swapped = !this.swapped;
+    this.destinationFileModel = this.swapped ? this.applicationStateService.data[0] : this.applicationStateService.data[1];
+    this.sourceFileModel = this.swapped  ? this.applicationStateService.data[1] : this.applicationStateService.data[0];
+    this.control1.loadDocument(TXTextControl.StreamType.AdobePDF, this.sourceFileModel.fileData);
+    this.control2.loadDocument(TXTextControl.StreamType.AdobePDF, this.destinationFileModel.fileData);
+  }
 
   getDocument() {
 
@@ -54,7 +68,7 @@ export class TextControlComponent implements OnInit {
       console.log(e.data);
       this.destinationFileModel.fileData=e.data;
       this.mergePDFService.saveMergedDocument(this.destinationFileModel).subscribe(response => {
-        
+        this.router.navigate(['/']);
       });
       //  console.log(e.data);
     }).bind(this));
@@ -66,7 +80,7 @@ export class TextControlComponent implements OnInit {
       this.control1.saveDocument(TXTextControl.StreamType.AdobePDF , (function (d) {
         this.sourceFileModel.fileData= d.data;
         this.mergePDFService.autoMergedDocument([this.destinationFileModel,this.sourceFileModel]).subscribe(response => {
-        
+          this.router.navigate(['/']);
         });
         //  console.log(e.data);
       }).bind(this));
@@ -74,6 +88,9 @@ export class TextControlComponent implements OnInit {
     }).bind(this));
 
     
+  }
+  cancel(){
+    this.router.navigate(['/']);
   }
 }
 

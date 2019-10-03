@@ -92,7 +92,7 @@ namespace PDFMerge.Controllers
         public IActionResult Save(FileModel model)
         {
             byte[] bytes = Convert.FromBase64String(model.FileData);
-            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", model.FileName + ".pdf");
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", model.FileName);
             System.IO.File.WriteAllBytes(filePath, bytes);
             return Ok();
         }
@@ -103,14 +103,27 @@ namespace PDFMerge.Controllers
         {
             byte[] bytes = Convert.FromBase64String(models[0].FileData);
             byte[] secondbytes = Convert.FromBase64String(models[1].FileData);
-            byte[] combinedArray = new byte[bytes.Length + secondbytes.Length];
-            Array.Copy(bytes, 0, combinedArray, 0, bytes.Length);
-            Array.Copy(secondbytes, 0, combinedArray, bytes.Length, secondbytes.Length);
-            
-            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", models[0].FileName + ".pdf");
-            System.IO.File.WriteAllBytes(filePath, combinedArray);
+
+
+            PdfDocument pdf1 = new PdfDocument();
+            pdf1.LoadFromBytes(bytes);
+            PdfDocument pdf2 = new PdfDocument();
+            pdf2.LoadFromBytes(secondbytes);
+            pdf1.AppendPage(pdf2);
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", models[0].FileName);
+            pdf1.SaveToFile(filePath);
+            pdf1.Close();
+            pdf2.Close();
+            //System.IO.File.WriteAllBytes(filePath, combinedArray);
             return Ok();
         }
-
+        [HttpGet]
+        [Route("[action]")]
+        public IActionResult DownloadFile([FromQuery]string fileName)
+        {
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", fileName);
+            var fileData = System.IO.File.ReadAllBytes(filePath);
+            return File(fileData, "application/pdf", fileName);
+        }
     }
 }

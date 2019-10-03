@@ -9,20 +9,23 @@
   <button class="btn btn-primary" (click)="swap()" type="button">Swap Documents</button>
 </div>
 <div class="col-12">
-  <div class="col-6 float-left">Merge from {{sourceFileModel.fileName}}</div>
-  <div class="col-6 float-left">
-      <div class="col-2 float-left" style="white-space: nowrap;display: inline-flex;">Merge to</div>
+  <div class="col-6 float-left"><span style="font-weight: bold;">Merge from</span> {{sourceFileModel.fileName}}</div>
+  <div class="col-6 float-left mb-2">
+      <div class="col-2 float-left" style="white-space: nowrap;display: inline-flex;font-weight: bold;padding-top: 5px;">Merge into</div>
     <div class="col-5 float-left" style="white-space: nowrap;display: inline-flex;">
        
       <input type="text" class="form-control mr-2" placeholder="File Name" [(ngModel)]="destinationFileModel.fileName">
     </div>
     <div class="col-5 float-left">
-      <span class="input-group-btn">
+      <span class="input-group-btn mr-3">
         <button class="btn btn-primary" type="button" (click)="merge()">Merge</button>
       </span>
-      <span class="input-group-btn">
-          <button class="btn btn-primary" type="button" (click)="autoMerge()">Auto merge</button>
+      <span class="input-group-btn mr-3">
+          <button class="btn btn-primary" type="button" (click)="autoMerge()">Append</button>
         </span>
+        <span class="input-group-btn ">
+            <button class="btn btn-secondary" type="button" (click)="cancel()">Cancel</button>
+          </span>
     </div>
   </div>
 </div>

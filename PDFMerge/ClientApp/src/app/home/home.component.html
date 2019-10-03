@@ -12,7 +12,7 @@
        (change)="onFilesSelect($event)" />
 <ng-template #content let-ca="close('local')" let-cb="close('cloud')" let-d="dismiss()">
   <div class="modal-header">
-    <h4 class="modal-title">Modal title</h4>
+    <h4 class="modal-title">Second file</h4>
     <span class="commonglyphs commonglyphs-close pull-right modal-close" aria-label="Close" (click)="ca"></span>
   </div>
   <div class="modal-body">
@@ -32,13 +32,13 @@
   </div>
   <div class="modal-body">
     <p>Please select second file to merge</p>
-    <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-balham" [rowData]="documentFiles"
+    <ag-grid-angular style="width: 500px; height: 500px;" rowSelection="single" class="ag-theme-balham" [rowData]="documentFiles"
                      [columnDefs]="columnDefs" [allowContextMenuWithControlKey]="true" (selectionChanged)="onDocumentFilesSelectionChanged($event)"
                      (gridReady)="onDocumentFilesGridReady($event)">
     </ag-grid-angular>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" type="button" (click)="close(merge)">Merge</button>
+    <button class="btn btn-primary" type="button" (click)="close(merge)" [disabled]="!isFileSelected()">Merge</button>
     <!-- <button class="btn btn-primary" type="button" (click)="close(cb)">Select from cloud</button> -->
     <button class="btn btn-secondary" type="button" (click)="e">Cancel</button>
   </div>
