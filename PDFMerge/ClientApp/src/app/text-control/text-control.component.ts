@@ -12,10 +12,14 @@ declare var TXTextControlWeb, TXTextControl;
 })
 export class TextControlComponent implements OnInit {
 
-  constructor(private mergePDFService: MergepdfService,private applicationStateService:ApplicationStateService) {
-    if(this.applicationStateService.data){
+  constructor(private mergePDFService: MergepdfService, private applicationStateService: ApplicationStateService) {
+    if (!this.applicationStateService.data) {
+      this.sourceFileModel = JSON.parse(localStorage.getItem('data'))[0];;
+      this.destinationFileModel = JSON.parse(localStorage.getItem('data'))[1];
+    }
+    else {
       this.sourceFileModel=this.applicationStateService.data[0];
-      this.destinationFileModel=this.applicationStateService.data[1];
+      this.destinationFileModel = this.applicationStateService.data[1];
     }
   }
   sourceFileModel:FileModel;

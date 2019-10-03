@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import "ag-grid-enterprise";
 import { MergepdfService } from '../services/mergepdf.service';
 import { FileModel } from '../model/file.model';
@@ -11,12 +11,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss'],
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   title = 'MergePDF';
   gridApi;
   documentFilesGridAPI;
   selectedRowData: any;
   documentFiles: FileModel[];
+
+  ngOnInit() {
+    localStorage.clear();
+  }
 
   @ViewChild('content') modalContentRef: ElementRef;
   @ViewChild('fileLoader') fileLoaderRef: ElementRef;
@@ -25,7 +29,6 @@ export class HomeComponent {
     private applicationStateService: ApplicationStateService,
     private modalService: NgbModal,
     private router: Router) {
-
     this.applicationStateService.data = [];
   }
 
@@ -62,15 +65,18 @@ export class HomeComponent {
     var result = [
       {
         name: "Merge",
-        action: function () {        
-          if(this.applicationStateService.data && this.applicationStateService.data.length==1){
+        action: function () {
+          localStorage.setItem('data', JSON.stringify(this.applicationStateService.data));
+          if (this.applicationStateService.data && this.applicationStateService.data.length == 1) {
             this.open(this.modalContentRef);
           }
-          else{
+          if (this.applicationStateService.data && this.applicationStateService.data.length == 2) {
             this.router.navigate(['/text-control']);
           }
+          if (this.applicationStateService.data && this.applicationStateService.data.length > 2) {
+            alert('Please select no more that 2 files');
+          }
           //this.applicationStateService.data=this.selectedRowData;
-         
         }.bind(this),
         cssClasses: ["redFont", "bold"]
       }];
