@@ -67,23 +67,18 @@ namespace PDFMerge.Controllers
         public ActionResult<bool> SaveFile([FromForm]IFormFile file)
         {
             var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", file.FileName);
-            PdfDocument pdf = new PdfDocument();
             using (var ms = new MemoryStream())
             {
                 file.CopyTo(ms);
                 var fileBytes = ms.ToArray();
-                pdf.LoadFromBytes(fileBytes);
-                pdf.SaveToFile(filePath, FileFormat.PDF);
+                System.IO.File.WriteAllBytes(filePath, fileBytes);
             }
 
-            pdf = new PdfDocument();
-            pdf.LoadFromFile(filePath);
-            pdf.SaveToFile("Result.html", FileFormat.HTML);
-            string html = System.IO.File.ReadAllText("Result.html");
+           
             var fileInfo = new System.IO.FileInfo(filePath);
             var fileModel = new FileModel();
 
-            fileModel.FileData = html;
+            fileModel.FileData = Convert.ToBase64String(System.IO.File.ReadAllBytes(filePath));
             fileModel.FileName = Path.GetFileName(filePath);
             fileModel.LastModifiedDate = fileInfo.LastWriteTimeUtc.ToString("dd-MM-yyyy");
             fileModel.Id = 1;

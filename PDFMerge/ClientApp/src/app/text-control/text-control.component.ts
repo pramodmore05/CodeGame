@@ -16,6 +16,7 @@ export class TextControlComponent implements OnInit {
     if(this.applicationStateService.data){
     this.sourceFileModel=this.applicationStateService.data[0];
     this.destinationFileModel=this.applicationStateService.data[1];
+    
     }
   }
   sourceFileModel:FileModel;
