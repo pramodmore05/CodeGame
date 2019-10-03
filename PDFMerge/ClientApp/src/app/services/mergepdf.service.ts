@@ -23,4 +23,12 @@ export class MergepdfService {
   saveDocument(fileData:FormData){
     return this.httpClient.post('https://localhost:44372/api/files/saveFile',fileData);
   }
+
+  saveMergedDocument(fileData:FileModel){
+    return this.httpClient.post('https://localhost:44372/api/files/save',fileData);
+  }
+
+  autoMergedDocument(fileData:FileModel[]){
+    return this.httpClient.post('https://localhost:44372/api/files/automerge',fileData);
+  }
 }

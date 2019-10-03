@@ -2,6 +2,7 @@ import { Component, Inject, EventEmitter, Output, Input, OnInit } from '@angular
 import { HttpClient } from '@angular/common/http';
 import { ApplicationStateService } from '../services/application-state.service';
 import { MergepdfService } from '../services/mergepdf.service';
+import { FileModel } from '../model/file.model';
 
 declare var TXTextControlWeb, TXTextControl;
 
@@ -11,10 +12,14 @@ declare var TXTextControlWeb, TXTextControl;
 })
 export class TextControlComponent implements OnInit {
 
-  constructor(private mergePDFService: MergepdfService) {
-
+  constructor(private mergePDFService: MergepdfService,private applicationStateService:ApplicationStateService) {
+    if(this.applicationStateService.data){
+    this.sourceFileModel=this.applicationStateService.data[0];
+    this.destinationFileModel=this.applicationStateService.data[1];
+    }
   }
-
+  sourceFileModel:FileModel;
+  destinationFileModel:FileModel;
   
   control1: any;
   control2: any; 
@@ -25,35 +30,14 @@ export class TextControlComponent implements OnInit {
 
   ngOnInit(): void {
     this.control1 = new TXTextControlWeb("sourceContainer");
-    // this.control2 = new TXTextControlWeb("destContainer");
+     this.control2 = new TXTextControlWeb("destContainer");
     window.addEventListener("textControlWebLoaded", (function () {
       console.log(" control loaded");
-      this.mergePDFService.getFile().subscribe((res) => {
-        this.control1.loadDocument(TXTextControl.StreamType.AdobePDF, res.fileData);
-       // this.control2.loadDocument(TXTextControl.StreamType.AdobePDF, res.fileData);
-      });
-      setTimeout(function () {
-        // var ribbonGroup = document.getElementById('ribbonbar');
-
-        // ribbonGroup.setAttribute('display', 'none');
-      //  this.message = new Object();
-        this.message = new Object();
-        this.message.receiver = "txtextcontrol";
-        this.message.method = "showHorizontalRuler";
-
-       
-      //this.message.receiver = "txtextcontrol-client";
-      //this.message.data = hideRibbon;//'$("#ribbonbar").css("display","none");';
-      window.postMessage(this.message, "*");
-    }, 20000)
-      // this.control1.addEventListener("textDropped", this.textDroppedCallback);
-      // this.control1.addEventListener("fileDropped", function (e) {
-      // });
-     // document.getElementById("myTextControlContainer_txframe").setAttribute("droppable", "true");
-      //console.log(document.getElementById("myTextControlContainer_txframe"));
-      
-      // this.control1.ribbon.showElement("ribbonGroupMergeField", false);
-      // this.control1.ribbon.showElement("drpDnBtnInsertBookmark", false);
+      //this.mergePDFService.getFile().subscribe((res) => {
+        this.control1.loadDocument(TXTextControl.StreamType.AdobePDF, this.sourceFileModel.fileData);
+        this.control2.loadDocument(TXTextControl.StreamType.AdobePDF, this.destinationFileModel.fileData);
+      //});
+   
     }).bind(this));
 
    function hideRibbon(){
@@ -62,9 +46,33 @@ export class TextControlComponent implements OnInit {
         ribbonGroup.setAttribute('display', 'none');
     }
 
-    // console.log(this.control1);
-    // console.log(TXTextControl);
   }
-  
+  merge(){
+    this.control2.saveDocument(TXTextControl.StreamType.AdobePDF , (function (e) {
+      //data.conetntText = e.data;
+      console.log(e.data);
+      this.destinationFileModel.fileData=e.data;
+      this.mergePDFService.saveMergedDocument(this.destinationFileModel).subscribe(response => {
+        
+      });
+      //  console.log(e.data);
+    }).bind(this));
+  }
+
+  autoMerge(){
+    this.control2.saveDocument(TXTextControl.StreamType.AdobePDF , (function (e) {
+      this.destinationFileModel.fileData=e.data;
+      this.control1.saveDocument(TXTextControl.StreamType.AdobePDF , (function (d) {
+        this.sourceFileModel.fileData= d.data;
+        this.mergePDFService.autoMergedDocument([this.destinationFileModel,this.sourceFileModel]).subscribe(response => {
+        
+        });
+        //  console.log(e.data);
+      }).bind(this));
+      //  console.log(e.data);
+    }).bind(this));
+
+    
+  }
 }
 

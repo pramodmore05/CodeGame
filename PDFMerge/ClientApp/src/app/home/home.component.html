@@ -1,11 +1,15 @@
-<ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-balham" [rowData]="rowData"
-  [columnDefs]="columnDefs" rowSelection="multiple" [getContextMenuItems]="getContextMenuItems"
-  [allowContextMenuWithControlKey]="true" (selectionChanged)="onSelectionChanged($event)"
-  (gridReady)="onGridReady($event)">
-</ag-grid-angular>
 
+<div style="display: flex; flex-direction: row">
+  <div style=" overflow: hidden; flex-grow: 1">
+    <ag-grid-angular style="width:100%; height: 500px;" class="ag-theme-balham" [rowData]="rowData"
+                     [columnDefs]="columnDefs" rowSelection="multiple" [getContextMenuItems]="getContextMenuItems"
+                     [allowContextMenuWithControlKey]="true" (selectionChanged)="onSelectionChanged($event)"
+                     (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+</div>
 <input type="file" id="fileLoader" #fileLoader style="display: none;" name="files" title="Load File" accept=".pdf"
-  (change)="onFilesSelect($event)" />
+       (change)="onFilesSelect($event)" />
 <ng-template #content let-ca="close('local')" let-cb="close('cloud')" let-d="dismiss()">
   <div class="modal-header">
     <h4 class="modal-title">Modal title</h4>
@@ -21,7 +25,7 @@
   </div>
 </ng-template>
 
-<ng-template #cloudmodalcontent let-merge="close('merge')"  let-e="dismiss()">
+<ng-template #cloudmodalcontent let-merge="close('merge')" let-e="dismiss()">
   <div class="modal-header">
     <h4 class="modal-title">Document files</h4>
     <span class="commonglyphs commonglyphs-close pull-right modal-close" aria-label="Close" (click)="ca"></span>
@@ -29,8 +33,8 @@
   <div class="modal-body">
     <p>Please select second file to merge</p>
     <ag-grid-angular style="width: 500px; height: 500px;" class="ag-theme-balham" [rowData]="documentFiles"
-      [columnDefs]="columnDefs" [allowContextMenuWithControlKey]="true" (selectionChanged)="onDocumentFilesSelectionChanged($event)"
-      (gridReady)="onDocumentFilesGridReady($event)">
+                     [columnDefs]="columnDefs" [allowContextMenuWithControlKey]="true" (selectionChanged)="onDocumentFilesSelectionChanged($event)"
+                     (gridReady)="onDocumentFilesGridReady($event)">
     </ag-grid-angular>
   </div>
   <div class="modal-footer">

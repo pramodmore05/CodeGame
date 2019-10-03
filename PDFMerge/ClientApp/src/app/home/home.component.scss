@@ -4,24 +4,39 @@
   
     &:hover,
     &::selection {
-      color: $wk-primary-black;
+      color: #000;
     }
   
     cursor: pointer;
   }
-  
-  .modal-header {
-    background-color: blue !important;
-    color: white !important;
-    border-top-left-radius: 0 !important;
-    border-top-right-radius: 0 !important;
-    display: flex;
-    align-items: center;
-  }
-  
-  .modal-content {
-    border-radius: 0;
-  }
+
+.modal-header {
+  /*background-color: blue !important;*/
+  /*color: white !important;*/
+  background-color: #f5f7f7 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
+
+::ng-deep .modal-custom .modal-dialog {
+  max-width: 530px !important;
+}
+
+::ng-deep .modal-content {
+  border-radius: 0;
+  width: 550px;
+}
+
+.modal-custom{
+  width:100%;
+}
+
+.modal-custom .model-content {
+  width: 550px;
+}
   
   // @media (min-width: 1126px) {
   //   .modal-dialog {
@@ -97,3 +112,4 @@
   #fileLoader{
       display: none;
   }
+

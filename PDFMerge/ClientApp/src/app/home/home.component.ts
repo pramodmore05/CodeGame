@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
+  styleUrls: ['./home.component.scss'],
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
@@ -29,9 +30,9 @@ export class HomeComponent {
   }
 
   columnDefs = [
-    { headerName: 'FileName', field: 'fileName' },
-    { headerName: 'Size', field: 'size' },
-    { headerName: 'Last Modified', field: 'lastModifiedDate' }
+    { headerName: 'FileName', field: 'fileName', minWidth: 100 },
+    { headerName: 'Size', field: 'size', minWidth: 50 },
+    { headerName: 'Last Modified', field: 'lastModifiedDate', minWidth: 50 }
   ];
 
   rowData: FileModel[];
@@ -41,8 +42,9 @@ export class HomeComponent {
     // this.gridColumnApi = params.columnApi;
     this.mergePDFService.getFiles().subscribe((response) => {
       this.rowData = response;
+      this.gridApi.sizeColumnsToFit();
     });
-
+    
   }
 
 
@@ -65,7 +67,7 @@ export class HomeComponent {
             this.open(this.modalContentRef);
           }
           else{
-            this.router.navigate(['/merge-docs']);
+            this.router.navigate(['/text-control']);
           }
           //this.applicationStateService.data=this.selectedRowData;
          
@@ -81,6 +83,8 @@ export class HomeComponent {
     this.documentFiles = this.rowData.filter(m => m.fileName != this.applicationStateService.data[0].fileName);
     //});
   }
+
+
 
   onDocumentFilesSelectionChanged() {
     var selectedRows = this.documentFilesGridAPI.getSelectedRows();
@@ -111,7 +115,7 @@ export class HomeComponent {
   }
 
   openDocumentFileModel(content) {
-    this.modalService.open(content, { centered: true }).result.then((result) => {
+    this.modalService.open(content, { centered: true, windowClass:'modal-custom'}).result.then((result) => {
       console.log(result);
       if (result == "merge") {
       }
@@ -128,7 +132,7 @@ export class HomeComponent {
     formData.append("file", files[0]);
     this.mergePDFService.saveDocument(formData).subscribe((response: FileModel) => {
       this.applicationStateService.data.push(response);
-      this.router.navigate(['/merge-docs']);
+      this.router.navigate(['/text-control']);
     }, (error) => {
 
     });

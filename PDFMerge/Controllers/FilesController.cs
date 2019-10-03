@@ -45,25 +45,23 @@ namespace PDFMerge.Controllers
             var filesModel = new List<FileModel>();
             var path = Environment.CurrentDirectory + "\\files";
             string[] files = System.IO.Directory.GetFiles(path, "*.pdf");
-            foreach(var file in files)
+            foreach (var file in files)
             {
-                PdfDocument pdf = new PdfDocument();
-                pdf.LoadFromFile(file);
-                pdf.SaveToFile("Result.html", FileFormat.HTML);
-                string html = System.IO.File.ReadAllText("Result.html");
+
+                byte[] bytes = System.IO.File.ReadAllBytes(file);
                 var fileInfo = new System.IO.FileInfo(file);
                 filesModel.Add(new FileModel()
                 {
-                    FileData = html,
+                    FileData = Convert.ToBase64String(bytes),
                     FileName = Path.GetFileName(file),
                     LastModifiedDate = fileInfo.LastWriteTimeUtc.ToString("dd-MM-yyyy"),
                     Id = 1,
-                    Size = $"{fileInfo.Length} bytes" 
+                    Size = $"{fileInfo.Length} bytes"
                 });
             }
             return Ok(filesModel);
         }
-        
+
         [HttpPost]
         [Route("[action]")]
         public ActionResult<bool> SaveFile([FromForm]IFormFile file)
@@ -90,28 +88,33 @@ namespace PDFMerge.Controllers
             fileModel.LastModifiedDate = fileInfo.LastWriteTimeUtc.ToString("dd-MM-yyyy");
             fileModel.Id = 1;
             fileModel.Size = $"{fileInfo.Length} bytes";
-            
+
             return Ok(fileModel);
         }
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult<bool> Save(FileModel model)
+        public IActionResult Save(FileModel model)
         {
-            return false;
-            //PdfDocument pdf = new PdfDocument();
-            //string input = @"<strong>This is a test for converting HTML string to PDF </strong>
-            //     <ul><li>Spire.PDF supports to convert HTML in URL into PDF</li>
-            //     <li>Spire.PDF supports to convert HTML string into PDF</li>
-            //     <li>With the new plugin</li></ul>";
+            byte[] bytes = Convert.FromBase64String(model.FileData);
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", model.FileName + ".pdf");
+            System.IO.File.WriteAllBytes(filePath, bytes);
+            return Ok();
+        }
 
-            //Spire.Pdf.HtmlConverter.Qt.HtmlConverter.Convert(input, "1.pdf", true, 10 * 1000, new SizeF(612, 792), new PdfMargins(0), LoadHtmlType.SourceCode);
-            //pdf.LoadFromFile("Result.html", FileFormat.HTML);
-            //var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", model.FileName + ".pdf");
-            //byte[] bytes = Encoding.ASCII.GetBytes(model.FileData);
-            ////pdf.LoadFromBytes(bytes);
-            //pdf.SaveToFile(filePath, FileFormat.PDF);
-            //return true;
+        [HttpPost]
+        [Route("[action]")]
+        public IActionResult AutoMerge(List<FileModel> models)
+        {
+            byte[] bytes = Convert.FromBase64String(models[0].FileData);
+            byte[] secondbytes = Convert.FromBase64String(models[1].FileData);
+            byte[] combinedArray = new byte[bytes.Length + secondbytes.Length];
+            Array.Copy(bytes, 0, combinedArray, 0, bytes.Length);
+            Array.Copy(secondbytes, 0, combinedArray, bytes.Length, secondbytes.Length);
+            
+            var filePath = Path.Combine(Environment.CurrentDirectory + "\\files\\", models[0].FileName + ".pdf");
+            System.IO.File.WriteAllBytes(filePath, combinedArray);
+            return Ok();
         }
 
     }
