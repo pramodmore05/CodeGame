@@ -27,10 +27,10 @@ export class MergeDocumentsComponent {
 
   public configuration: any;
   constructor(private service: ApplicationStateService) {
-    this.sourceName = service.data[1][0].fileName;
-    this.destinationName = service.data[1][1].fileName;
-    this._sourceHtmlContent = service.data[1][0].fileData;
-    this._destinationHtmlContent = service.data[1][1].fileData;
+    this.sourceName = service.data[0].fileName;
+    this.destinationName = service.data[1].fileName;
+    this._sourceHtmlContent = service.data[0].fileData;
+    this._destinationHtmlContent = service.data[1].fileData;
     this.configuration = {
       placeholder: '',
       tabsize: 2,

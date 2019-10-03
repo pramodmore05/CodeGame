@@ -60,12 +60,15 @@ export class HomeComponent {
     var result = [
       {
         name: "Merge",
-        action: function () {
-          //window.alert("Alerting about " + params.value);
-          console.log(this.selectedRowData);
-          this.router.navigate(['/merge-docs']);
+        action: function () {        
+          if(this.applicationStateService.data && this.applicationStateService.data.length==1){
+            this.open(this.modalContentRef);
+          }
+          else{
+            this.router.navigate(['/merge-docs']);
+          }
           //this.applicationStateService.data=this.selectedRowData;
-          this.open(this.modalContentRef);
+         
         }.bind(this),
         cssClasses: ["redFont", "bold"]
       }];
@@ -125,7 +128,7 @@ export class HomeComponent {
     formData.append("file", files[0]);
     this.mergePDFService.saveDocument(formData).subscribe((response: FileModel) => {
       this.applicationStateService.data.push(response);
-
+      this.router.navigate(['/merge-docs']);
     }, (error) => {
 
     });

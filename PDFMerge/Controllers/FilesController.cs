@@ -25,7 +25,7 @@ namespace PDFMerge.Controllers
         {
             var fileModel = new FileModel();
             var path = Environment.CurrentDirectory + "\\files";
-            string pdfFilePath = path +"\\1.pdf";
+            string pdfFilePath = path + "\\Resume_Brijen_Makwana.pdf";
             byte[] bytes = System.IO.File.ReadAllBytes(pdfFilePath);
             return new FileModel()
             {
