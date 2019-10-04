@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   }
 
   columnDefs = [
-    { headerName: 'FileName', field: 'fileName', minWidth: 100 },
+    { headerName: 'File Name', field: 'fileName', minWidth: 100 },
     { headerName: 'Size', field: 'size', minWidth: 50 },
     { headerName: 'Last Modified', field: 'lastModifiedDate', minWidth: 50 }
   ];
